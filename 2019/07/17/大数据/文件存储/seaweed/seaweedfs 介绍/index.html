@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="个人笔记"><title>seaweedfs 介绍 | 记忆不靠谱</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.0/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><meta name="generator" content="Hexo 4.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">seaweedfs 介绍</h1><a id="logo" href="/.">记忆不靠谱</a><p class="description">人生很奇妙，过好每一天</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">seaweedfs 介绍</h1><div class="post-meta">Jul 17, 2019<span> | </span><span class="category"><a href="/categories/seaweed/">seaweed</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他特性"><span class="toc-number">2.</span> <span class="toc-text">其他特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#架构"><span class="toc-number">3.</span> <span class="toc-text">架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主服务器（master-server）和卷服务器-volmue-server"><span class="toc-number">3.1.</span> <span class="toc-text">主服务器（master server）和卷服务器(volmue server)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件读写"><span class="toc-number">3.2.</span> <span class="toc-text">文件读写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储大小"><span class="toc-number">3.3.</span> <span class="toc-text">存储大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Saving-memory"><span class="toc-number">3.4.</span> <span class="toc-text">Saving memory</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关定义意义说明"><span class="toc-number">4.</span> <span class="toc-text">相关定义意义说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块说明"><span class="toc-number">5.</span> <span class="toc-text">模块说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Weed-master"><span class="toc-number">5.1.</span> <span class="toc-text">Weed master</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#defaultReplication"><span class="toc-number">5.1.1.</span> <span class="toc-text">defaultReplication</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Weed-volume"><span class="toc-number">5.2.</span> <span class="toc-text">Weed volume</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Weed-filer"><span class="toc-number">5.3.</span> <span class="toc-text">Weed filer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Weed-upload"><span class="toc-number">5.4.</span> <span class="toc-text">Weed upload</span></a></li></ol></li></ol></div></div><div class="post-content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Seaweedfs是一个简单，高扩展性的分布式文件系统，它的两个目标分别是：</p>
+<ol>
+<li>存储数十亿级的文件</li>
+<li>快速响应文件</li>
+</ol>
+<p>SeaweedFS最初作为一个对象存储来有效地处理小文件。中央主服务器只管理文件卷，而不是管理中央主服务器中的所有文件元数据，它允许这些卷服务器管理文件及其元数据。这减轻了中央主服务器的并发压力，并将文件元数据传播到卷服务器，允许更快的文件访问(只需一个磁盘读取操作)。</p>
+<p>每个文件的元数据只有40字节的磁盘存储开销。使用O(1)磁盘读取非常简单。</p>
+<p>SeaweedFS 基于Facebook’s Haystack design paper 实现 。除此之外，SeaweedFS 基于 f4: Facebook’s Warm BLOB Storage System的思想实现了擦除编码。</p>
+<p>仅使用对象存储就可以很好地使用SeaweedFS。Filer随后可以添加到支持目录和POSIX属性。Filer是一个独立可直线扩展的无状态服务器，具有可定制的元数据存储，例如MySql/Postgres/Redis/Cassandra/LevelDB。</p>
+<a id="more"></a>
+
+<h2 id="其他特性"><a href="#其他特性" class="headerlink" title="其他特性"></a>其他特性</h2><ul>
+<li>可以选择是否使用数据副本，以及副本的级别</li>
+<li>master servers失败自动漂移-杜绝单点故障</li>
+<li>根据文件的mime类型自动进行gzip压缩（linux查看文件的mime类型,file –mime-type）</li>
+<li>删除及更新操作之后通过压缩实现自动的磁盘空间回收</li>
+<li>集群中的服务器之间可以存在不同的磁盘空间，文件系统，操作系统</li>
+<li>添加/删除服务不会导致数据的重新平衡</li>
+<li>可选择修复jpeg图片的方向</li>
+<li>Optional filer server provides “normal” directories and files via http</li>
+<li>Support Etag, Accept-Range, Last-Modified, etc.</li>
+<li>Support in-memory/leveldb/boltdb/btree mode tuning for memory/performance balance.</li>
+</ul>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p>通常，分布式文件系统将每个文件分割成块，中央主服务器保存文件名、块索引到块句柄的映射，以及每个块服务器有哪些块。</p>
+<p>主要缺点是，中央主服务器不能有效地处理许多小文件，而且由于所有读请求都需要通过块主服务器，所以它可能不能很好地扩展为许多并发用户。</p>
+<p>与管理块不同，SeaweedFS管理主服务器中的数据卷。每个数据卷的大小为32GB，可以容纳很多文件。每个存储节点可以有许多数据卷。因此，主节点只需要存储关于卷的元数据，这是一个相当小的数据量，通常是稳定的。</p>
+<p>实际的文件元数据存储在卷服务器上的每个卷中。由于每个卷服务器只管理自己磁盘上的文件元数据，每个文件只有16个字节，所以所有文件访问都可以从内存中读取文件元数据，并且只需要一个磁盘操作就可以实际读取文件数据。</p>
+<h3 id="主服务器（master-server）和卷服务器-volmue-server"><a href="#主服务器（master-server）和卷服务器-volmue-server" class="headerlink" title="主服务器（master server）和卷服务器(volmue server)"></a>主服务器（master server）和卷服务器(volmue server)</h3><p>架构相当简单。实际数据以卷的形式存储在存储节点上。一个卷服务器可以有多个卷，并且可以通过基本身份验证同时支持读写访问。</p>
+<p>所有卷都由主服务器管理。主服务器包含卷id到卷服务器的映射。这是相当静态的信息，可以很容易地缓存。</p>
+<p>对于每个写请求，主服务器还生成一个文件密钥，这是一个不断增长的64位无符号整数。由于写请求通常不像读请求那么频繁，所以一个主服务器应该能够很好地处理并发。</p>
+<h3 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h3><p>当客户机发送写请求时，主服务器返回文件的(卷id、文件密钥、文件cookie、卷节点url)。然后客户机与卷节点联系并发布文件内容。</p>
+<p>当客户机需要基于(卷id、文件密钥、文件cookie)读取文件时，它通过卷id询问主服务器(卷节点url、卷节点公共url)，或者从缓存中检索该文件。然后客户端可以获取内容，或者只是在web页面上呈现URL，让浏览器获取内容。</p>
+<h3 id="存储大小"><a href="#存储大小" class="headerlink" title="存储大小"></a>存储大小</h3><p>在当前实现中，每个卷可以容纳32GiB。这是因为我们将内容对齐到8个字节。通过更改两行代码，我们可以轻松地将其增加到64GiB或128GiB，甚至更多，这是以对齐造成的填充空间浪费为代价的。</p>
+<p>卷可以是4GiB。所以总的系统大小是8 x 4GiB x 4GiB等于128EiB。</p>
+<p>每个单独的文件大小都受卷大小的限制。</p>
+<h3 id="Saving-memory"><a href="#Saving-memory" class="headerlink" title="Saving memory"></a>Saving memory</h3><p>存储在卷服务器上的所有文件元信息都可以在没有磁盘访问的情况下从内存中读取。每个文件只需要一个小于64位键、32位偏移量、32位大小为&gt;的16字节映射条目。当然，每个地图条目都有自己的空间成本。但通常磁盘空间在内存耗尽之前就耗尽了。</p>
+<h2 id="相关定义意义说明"><a href="#相关定义意义说明" class="headerlink" title="相关定义意义说明"></a>相关定义意义说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">master: 存储映射关系，文件和fid的映射关系</span><br><span class="line">Node: 系统抽象的结点，抽象为datacenter、rack、datanode</span><br><span class="line">datacenter: 数据中心，包含多个rack，类似一个机房</span><br><span class="line">rack ：属于一个datacenter，类似机房中的一个机架  </span><br><span class="line">datanode: volume server，存储节点，存储多个volume，类似机架中的一个机器</span><br><span class="line">volume: 逻辑卷，存储的逻辑结构，逻辑卷下存储Needle</span><br><span class="line">needle： 逻辑卷中的object，对应存储的文件</span><br><span class="line">collection：文件集，默认所有文件都属于&quot;&quot;文件集。如果想给某些文件单独分类，可以在申请id的时候指定相同的文件集</span><br><span class="line">filer ：指向一个或多个master的file服务器，多个使用逗号隔开。</span><br></pre></td></tr></table></figure>
+
+<h2 id="模块说明"><a href="#模块说明" class="headerlink" title="模块说明"></a>模块说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Weed master	开启一个master服务器</span><br><span class="line">Weed volume	开启一个volume 服务器</span><br><span class="line">Weed filer	开启一个指向一个或多个master服务器的file服务器</span><br><span class="line">Weed upload	上传一个或多个文件</span><br><span class="line">Weed server	启动一个服务器，包括一个volume服务器和自动选举一个master服务器</span><br></pre></td></tr></table></figure>
+
+<h3 id="Weed-master"><a href="#Weed-master" class="headerlink" title="Weed master"></a>Weed master</h3><p>weed master 创建的是一个master服务器。</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">defaultReplication</td>
+<td align="left">String</td>
+<td align="left">备份策略,如果没有指定默认备份类型。默认”000”</td>
+</tr>
+<tr>
+<td align="left">ip</td>
+<td align="left">String</td>
+<td align="left">Master服务器ip地址(默认”localhost”)</td>
+</tr>
+<tr>
+<td align="left">ip.bind</td>
+<td align="left">String</td>
+<td align="left">需要绑定的ip地址(默认”0.0.0.0”)</td>
+</tr>
+<tr>
+<td align="left">mdir</td>
+<td align="left">String</td>
+<td align="left">存储元数据的数据目录(默认”/tmp”)</td>
+</tr>
+<tr>
+<td align="left">port</td>
+<td align="left">Int</td>
+<td align="left">http监听端口(默认9333)</td>
+</tr>
+<tr>
+<td align="left">volumeSizeLimitMB</td>
+<td align="left">Uint</td>
+<td align="left">Master停止指向过量的volumes写的限定(默认30000)</td>
+</tr>
+<tr>
+<td align="left">whiteList</td>
+<td align="left">string</td>
+<td align="left">逗号分隔具有写权限的Ip地址。如果是空的，没有限制。即白名单</td>
+</tr>
+</tbody></table>
+<h4 id="defaultReplication"><a href="#defaultReplication" class="headerlink" title="defaultReplication"></a>defaultReplication</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">000 不备份， 只有一份数据</span><br><span class="line">001 在相同的rack里备份一份数据</span><br><span class="line">010 在相同数据中心内不同的rack间备份一份数据</span><br><span class="line">100 在不同的数据中心备份一份数据</span><br><span class="line">200 在两个不同的数据中心各复制2次</span><br><span class="line">110 在不同的rack备份一份数据， 在不同的数据中心备份一次</span><br></pre></td></tr></table></figure>
+<p>如果数据备份类型是 xyz形式,各自的意义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x 在别的数据中心备份的份数</span><br><span class="line">y 不相同数据中心不同的racks备份的份数</span><br><span class="line">z 在别的服务器相同的rack的备份份数</span><br></pre></td></tr></table></figure>
+<h3 id="Weed-volume"><a href="#Weed-volume" class="headerlink" title="Weed volume"></a>Weed volume</h3><p>weed volume会创建一个 datanode，可以指定所属的 datacenter rack和master，会根据配置存储文件，默认一开始没有volume，当开始存储文件的时候才会创建一个volume，当这一个volume大小超过了volumeSizeLimitMB就会新增一个volume，当volume个数超过了max则该datanode就不能新增数据了。那就需要在通过weed volume命令新增一个datanode。</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">dir</td>
+<td align="left">string</td>
+<td align="left">存储数据文件的目录dir[,dir]…(默认”/tmp”)</td>
+</tr>
+<tr>
+<td align="left">ip</td>
+<td align="left">string</td>
+<td align="left">Ip地址或服务器名称</td>
+</tr>
+<tr>
+<td align="left">mserver</td>
+<td align="left">string</td>
+<td align="left">用逗号分隔的master服务器列表(默认”localhost:9333”)</td>
+</tr>
+<tr>
+<td align="left">port</td>
+<td align="left">Int</td>
+<td align="left">http监听端口号(默认8080)</td>
+</tr>
+<tr>
+<td align="left">dataCenter</td>
+<td align="left">string</td>
+<td align="left">当前volume服务的数据中心名称</td>
+</tr>
+<tr>
+<td align="left">rack</td>
+<td align="left">string</td>
+<td align="left">当前volume服务器的rack 名称</td>
+</tr>
+<tr>
+<td align="left">whiteList</td>
+<td align="left">string</td>
+<td align="left">逗号分隔具有写权限的Ip地址。如果是空的，没有限制。</td>
+</tr>
+</tbody></table>
+<h3 id="Weed-filer"><a href="#Weed-filer" class="headerlink" title="Weed filer"></a>Weed filer</h3><table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">collection</td>
+<td align="left">String</td>
+<td align="left">所有数据将存储在这个集合中</td>
+</tr>
+<tr>
+<td align="left">dataCenter</td>
+<td align="left">String</td>
+<td align="left">首选在此数据中心写入volumes</td>
+</tr>
+<tr>
+<td align="left">dirListLimit</td>
+<td align="left">Int</td>
+<td align="left">限制子目录列表大小</td>
+</tr>
+<tr>
+<td align="left">ip</td>
+<td align="left">String</td>
+<td align="left">Filter服务器http监听ip地址</td>
+</tr>
+<tr>
+<td align="left">master</td>
+<td align="left">String</td>
+<td align="left">用逗号分隔的master服务器(默认“localhost:9333”)</td>
+</tr>
+<tr>
+<td align="left">port</td>
+<td align="left">Int</td>
+<td align="left">Filer服务器htp监听端口（默认8888)</td>
+</tr>
+</tbody></table>
+<h3 id="Weed-upload"><a href="#Weed-upload" class="headerlink" title="Weed upload"></a>Weed upload</h3><table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">collection</td>
+<td align="left">string</td>
+<td align="left">可选的集合名称</td>
+</tr>
+<tr>
+<td align="left">dataCenter</td>
+<td align="left">String</td>
+<td align="left">可选的数据中心名称</td>
+</tr>
+<tr>
+<td align="left">debug</td>
+<td align="left">无</td>
+<td align="left">显示debug信息</td>
+</tr>
+<tr>
+<td align="left">dir</td>
+<td align="left">String</td>
+<td align="left">如果指定，则递归地上传整个文件夹</td>
+</tr>
+<tr>
+<td align="left">include</td>
+<td align="left">String</td>
+<td align="left">需要上传的文件，跟-dir配合使用，例如<em>.pdf,</em>.html,ab?d.txt等</td>
+</tr>
+<tr>
+<td align="left">master</td>
+<td align="left">String</td>
+<td align="left">Seaweedfs master服务器地址（默认”localhost:9333”）</td>
+</tr>
+<tr>
+<td align="left">maxMB</td>
+<td align="left">Int</td>
+<td align="left">如果文件超过指定大小则进行分割</td>
+</tr>
+<tr>
+<td align="left">replication</td>
+<td align="left">String</td>
+<td align="left">备份类型</td>
+</tr>
+<tr>
+<td align="left">secure.secret</td>
+<td align="left">String</td>
+<td align="left">加密Json Web令牌(JWT)的密钥</td>
+</tr>
+<tr>
+<td align="left">ttl</td>
+<td align="left">string</td>
+<td align="left">存活时间 1m,1h,1d,1M,1y</td>
+</tr>
+</tbody></table>
+</div><div class="tags"><a href="/tags/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/">文件存储</a></div><div class="post-nav"><a class="pre" href="/2019/07/17/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/seaweed/seaweed%E6%90%AD%E5%BB%BA%E5%9B%BE%E7%89%87%E6%9C%8D%E5%8A%A1%E5%99%A8/">seaweed搭建图片服务器</a><a class="next" href="/2019/07/17/%E5%A4%A7%E6%95%B0%E6%8D%AE/hadoop%E4%BD%93%E7%B3%BB/hadoop/shuffle%E8%BF%87%E7%A8%8B/">shuffle过程</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://cunmin1718.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Beat/">Beat</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ES/">ES</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kibana/">Kibana</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LVS/">LVS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Logstash/">Logstash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Markdown/">Markdown</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nexus/">Nexus</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ansible/">ansible</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/drill/">drill</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/flume/">flume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ganglia/">ganglia</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/gitLab/">gitLab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/greenplum/">greenplum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/greenplum/PostgreSQL/">PostgreSQL</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hbase/">hbase</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hive/">hive</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/impala/">impala</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kafka/">kafka</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/seaweed/">seaweed</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/zookeeper/">zookeeper</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 15px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 15px;">杂谈</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 15px;">容器</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15px;">数据库</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" style="font-size: 15px;">项目开发</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 15px;">运维</a> <a href="/tags/ELK/" style="font-size: 15px;">ELK</a> <a href="/tags/hadoop%E4%BD%93%E7%B3%BB/" style="font-size: 15px;">hadoop体系</a> <a href="/tags/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/" style="font-size: 15px;">文件存储</a> <a href="/tags/%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/" style="font-size: 15px;">分析引擎</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 15px;">消息队列</a> <a href="/tags/%E8%BF%90%E7%BB%B4%E7%9B%91%E6%8E%A7/" style="font-size: 15px;">运维监控</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/" style="font-size: 15px;">日志收集</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Logstash/pipeline%E9%85%8D%E7%BD%AE/">pipeline配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Logstash/Logstash%E4%BB%8B%E7%BB%8D/">Logstash介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/FileBeat6.4%E5%AE%89%E8%A3%85/">FileBeat6.4 安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Logstash/logstash7.4%20%E9%85%8D%E7%BD%AE/">Logstash7.4 配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Kibana/Kibana7.4%E5%AE%89%E8%A3%85/">Kibana7.4安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/ElasticSearch/ES%207.4%E5%AE%89%E8%A3%85/">ES 7.4安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/Maven/15.%20%E6%8F%92%E4%BB%B6maven-enforcer-plugin/">插件maven-enforcer-plugin</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/Maven/14.%20%E6%8F%92%E4%BB%B6build-helper-maven-plugin/">插件build-helper-maven-plugin</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/Inmon%20%20VS%20Kimball/">3. Bill Inmon  VS. Ralph Kimball</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/30/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%BB%BA%E8%AE%BE%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1%E6%96%B9%E6%B3%95/">2. 数据仓库建设中的数据建模方法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">记忆不靠谱.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

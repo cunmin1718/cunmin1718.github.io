@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="个人笔记"><title>3. 容器生命周期管理 | 记忆不靠谱</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.0/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><meta name="generator" content="Hexo 4.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">3. 容器生命周期管理</h1><a id="logo" href="/.">记忆不靠谱</a><p class="description">人生很奇妙，过好每一天</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">3. 容器生命周期管理</h1><div class="post-meta">Sep 2, 2019<span> | </span><span class="category"><a href="/categories/docker/">docker</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#容器常用选项"><span class="toc-number">1.</span> <span class="toc-text">容器常用选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#run"><span class="toc-number">2.</span> <span class="toc-text">run</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建容器"><span class="toc-number">2.1.</span> <span class="toc-text">创建容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#start-stop-restart"><span class="toc-number">3.</span> <span class="toc-text">start/stop/restart</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kill"><span class="toc-number">4.</span> <span class="toc-text">kill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rm"><span class="toc-number">5.</span> <span class="toc-text">rm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pause-unpause"><span class="toc-number">6.</span> <span class="toc-text">pause/unpause</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#create"><span class="toc-number">7.</span> <span class="toc-text">create</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exec"><span class="toc-number">8.</span> <span class="toc-text">exec</span></a></li></ol></div></div><div class="post-content"><h2 id="容器常用选项"><a href="#容器常用选项" class="headerlink" title="容器常用选项"></a>容器常用选项</h2><table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-i, –interactive</td>
+<td align="left">交互式</td>
+</tr>
+<tr>
+<td align="left">-t, –tty</td>
+<td align="left">分配一个伪终端</td>
+</tr>
+<tr>
+<td align="left">-d, –detach</td>
+<td align="left">运行容器到后台</td>
+</tr>
+<tr>
+<td align="left">-a, –attach list</td>
+<td align="left">附加到运行的容器</td>
+</tr>
+<tr>
+<td align="left">–dns list</td>
+<td align="left">设置DNS服务器</td>
+</tr>
+<tr>
+<td align="left">-e, –env</td>
+<td align="left">设置环境变量</td>
+</tr>
+<tr>
+<td align="left">–env-file list</td>
+<td align="left">从文件读取环境变量</td>
+</tr>
+<tr>
+<td align="left">-p, –publish list</td>
+<td align="left">发布容器端口到主机</td>
+</tr>
+<tr>
+<td align="left">-P, –publish-all</td>
+<td align="left">发布容器所有EXPOSE的端口到宿主机随机端口</td>
+</tr>
+<tr>
+<td align="left">-h, –hostname string</td>
+<td align="left">设置容器主机名</td>
+</tr>
+<tr>
+<td align="left">–ip string</td>
+<td align="left">指定容器IP，只能用于自定义网络</td>
+</tr>
+<tr>
+<td align="left">–link list</td>
+<td align="left">添加连接到另一个容器</td>
+</tr>
+<tr>
+<td align="left">–network</td>
+<td align="left">连接容器到一个网络</td>
+</tr>
+<tr>
+<td align="left">–mount mount</td>
+<td align="left">挂载宿主机分区到容器</td>
+</tr>
+<tr>
+<td align="left">-v, –volume list</td>
+<td align="left">挂载宿主机目录到容器</td>
+</tr>
+<tr>
+<td align="left">–name string</td>
+<td align="left">指定容器名称</td>
+</tr>
+<tr>
+<td align="left">–restart string</td>
+<td align="left">容器退出时重启策略 默认no，可选值：[always</td>
+</tr>
+<tr>
+<td align="left">–add-host list</td>
+<td align="left">添加其他主机到容器中/etc/hosts</td>
+</tr>
+</tbody></table>
+<h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><p>创建一个新的容器并运行一个命令<br>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</span><br></pre></td></tr></table></figure>
+<p>OPTIONS说明：<br>-a stdin: 指定标准输入输出内容类型，可选 STDIN/STDOUT/STDERR 三项；<br>-d: 后台运行容器，并返回容器ID；<br>-i: 以交互模式运行容器，通常与 -t 同时使用；<br>-p: 端口映射，格式为：主机(宿主)端口:容器端口<br>-t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用；<br>–name=”nginx-lb”: 为容器指定一个名称；<br>–dns 8.8.8.8: 指定容器使用的DNS服务器，默认和宿主一致；<br>–dns-search example.com: 指定容器DNS搜索域名，默认和宿主一致；<br>-h “mars”: 指定容器的hostname；<br>-e username=”ritchie”: 设置环境变量；<br>–env-file=[]: 从指定文件读入环境变量；<br>–cpuset=”0-2” or –cpuset=”0,1,2”: 绑定容器到指定CPU运行；<br>-m :设置容器使用内存最大值；<br>–net=”bridge”: 指定容器的网络连接类型，支持 bridge/host/none/container: 四种类型；<br>–link=[]: 添加链接到另一个容器；<br>–expose=[]: 开放一个端口或一组端口；</p>
+<h3 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h3><p>创建一个容器名字为bs分配一个伪终端后台运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker container run -itd --name bs busybox</span><br><span class="line">## 容器id</span><br><span class="line">3d79c1434aa920264b151dcac336b73ae335f644768ab921b684b6631513d854</span><br></pre></td></tr></table></figure>
+
+<h2 id="start-stop-restart"><a href="#start-stop-restart" class="headerlink" title="start/stop/restart"></a>start/stop/restart</h2><p>docker start :启动一个或多个已经被停止的容器<br>docker stop :停止一个运行中的容器<br>docker restart :重启容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker start [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker stop [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker restart [OPTIONS] CONTAINER [CONTAINER...]</span><br></pre></td></tr></table></figure>
+
+<h2 id="kill"><a href="#kill" class="headerlink" title="kill"></a>kill</h2><p>杀掉一个运行中的容器<br>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker kill [OPTIONS] CONTAINER [CONTAINER...]</span><br></pre></td></tr></table></figure>
+<p>OPTIONS说明：<br>-s :向容器发送一个信号</p>
+<h2 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h2><p>删除一个或多少容器<br>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm [OPTIONS] CONTAINER [CONTAINER...]</span><br></pre></td></tr></table></figure>
+<p>OPTIONS说明：<br>-f :通过SIGKILL信号强制删除一个运行中的容器<br>-l :移除容器间的网络连接，而非容器本身<br>-v :-v 删除与容器关联的卷</p>
+<p>例如：<br>删除所有的exited容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a -q|xargs docker rm</span><br></pre></td></tr></table></figure>
+
+<h2 id="pause-unpause"><a href="#pause-unpause" class="headerlink" title="pause/unpause"></a>pause/unpause</h2><p>docker pause :暂停容器中所有的进程。<br>docker unpause :恢复容器中所有的进程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pause [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker unpause [OPTIONS] CONTAINER [CONTAINER...]</span><br></pre></td></tr></table></figure>
+
+<h2 id="create"><a href="#create" class="headerlink" title="create"></a>create</h2><p>创建一个新的容器但不启动它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker create [OPTIONS] IMAGE [COMMAND] [ARG...]</span><br></pre></td></tr></table></figure>
+
+<h2 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h2><p>在运行的容器中执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec [OPTIONS] CONTAINER COMMAND [ARG...]</span><br></pre></td></tr></table></figure>
+<p>OPTIONS说明：<br>-d :分离模式: 在后台运行<br>-i :即使没有附加也保持STDIN 打开<br>-t :分配一个伪终端</p>
+</div><div class="tags"><a href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></div><div class="post-nav"><a class="pre" href="/2019/09/02/%E5%AE%B9%E5%99%A8/docker/%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C/">4. 容器操作</a><a class="next" href="/2019/09/02/%E5%AE%B9%E5%99%A8/docker/%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86/">2. 本地镜像管理</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://cunmin1718.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Beat/">Beat</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ES/">ES</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kibana/">Kibana</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LVS/">LVS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Logstash/">Logstash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Markdown/">Markdown</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nexus/">Nexus</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ansible/">ansible</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/drill/">drill</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/flume/">flume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ganglia/">ganglia</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/gitLab/">gitLab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/greenplum/">greenplum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/greenplum/PostgreSQL/">PostgreSQL</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hbase/">hbase</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hive/">hive</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/impala/">impala</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kafka/">kafka</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/seaweed/">seaweed</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/zookeeper/">zookeeper</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 15px;">数据仓库</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 15px;">杂谈</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 15px;">容器</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15px;">数据库</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" style="font-size: 15px;">项目开发</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 15px;">运维</a> <a href="/tags/ELK/" style="font-size: 15px;">ELK</a> <a href="/tags/hadoop%E4%BD%93%E7%B3%BB/" style="font-size: 15px;">hadoop体系</a> <a href="/tags/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/" style="font-size: 15px;">文件存储</a> <a href="/tags/%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/" style="font-size: 15px;">分析引擎</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 15px;">消息队列</a> <a href="/tags/%E8%BF%90%E7%BB%B4%E7%9B%91%E6%8E%A7/" style="font-size: 15px;">运维监控</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/" style="font-size: 15px;">日志收集</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Logstash/pipeline%E9%85%8D%E7%BD%AE/">pipeline配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Logstash/Logstash%E4%BB%8B%E7%BB%8D/">Logstash介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/FileBeat6.4%E5%AE%89%E8%A3%85/">FileBeat6.4 安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Logstash/logstash7.4%20%E9%85%8D%E7%BD%AE/">Logstash7.4 配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/Kibana/Kibana7.4%E5%AE%89%E8%A3%85/">Kibana7.4安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E5%A4%A7%E6%95%B0%E6%8D%AE/ELK/ElasticSearch/ES%207.4%E5%AE%89%E8%A3%85/">ES 7.4安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/Maven/15.%20%E6%8F%92%E4%BB%B6maven-enforcer-plugin/">插件maven-enforcer-plugin</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/Maven/14.%20%E6%8F%92%E4%BB%B6build-helper-maven-plugin/">插件build-helper-maven-plugin</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/02/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/Inmon%20%20VS%20Kimball/">3. Bill Inmon  VS. Ralph Kimball</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/30/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%BB%BA%E8%AE%BE%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1%E6%96%B9%E6%B3%95/">2. 数据仓库建设中的数据建模方法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">记忆不靠谱.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
