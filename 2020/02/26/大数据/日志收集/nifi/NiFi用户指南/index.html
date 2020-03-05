@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="个人笔记"><title>NiFi用户指南 | 记忆不靠谱</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.0/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><meta name="generator" content="Hexo 4.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">NiFi用户指南</h1><a id="logo" href="/.">记忆不靠谱</a><p class="description">人生很奇妙，过好每一天</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">NiFi用户指南</h1><div class="post-meta">Feb 26, 2020<span> | </span><span class="category"><a href="/categories/NIFI/">NIFI</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#术语"><span class="toc-number">1.</span> <span class="toc-text">术语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NiFi用户界面"><span class="toc-number">2.</span> <span class="toc-text">NiFi用户界面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用多租户授权访问UI"><span class="toc-number">3.</span> <span class="toc-text">使用多租户授权访问UI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#向画布添加组件"><span class="toc-number">4.</span> <span class="toc-text">向画布添加组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置处理器-Configuring-a-Processor"><span class="toc-number">5.</span> <span class="toc-text">配置处理器 ( Configuring a Processor )</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置标签"><span class="toc-number">5.1.</span> <span class="toc-text">设置标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调度选项卡"><span class="toc-number">5.2.</span> <span class="toc-text">调度选项卡</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#调度策略"><span class="toc-number">5.2.1.</span> <span class="toc-text">调度策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并发任务-Concurrent-Tasks"><span class="toc-number">5.2.2.</span> <span class="toc-text">并发任务(Concurrent Tasks)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行计划-Run-Schedule"><span class="toc-number">5.2.3.</span> <span class="toc-text">运行计划(Run Schedule)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#执行-Execution"><span class="toc-number">5.2.4.</span> <span class="toc-text">执行(Execution)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行持续时间"><span class="toc-number">5.2.5.</span> <span class="toc-text">运行持续时间</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性选项卡"><span class="toc-number">5.3.</span> <span class="toc-text">属性选项卡</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量窗口"><span class="toc-number">6.</span> <span class="toc-text">变量窗口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可变范围"><span class="toc-number">6.1.</span> <span class="toc-text">可变范围</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制器服务"><span class="toc-number">7.</span> <span class="toc-text">控制器服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为报告任务添加控制器服务"><span class="toc-number">7.1.</span> <span class="toc-text">为报告任务添加控制器服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#报告任务"><span class="toc-number">8.</span> <span class="toc-text">报告任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接组件"><span class="toc-number">9.</span> <span class="toc-text">连接组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#细节标签"><span class="toc-number">9.1.</span> <span class="toc-text">细节标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置"><span class="toc-number">9.2.</span> <span class="toc-text">设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FlowFile到期"><span class="toc-number">9.2.1.</span> <span class="toc-text">FlowFile到期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后台压力"><span class="toc-number">9.2.2.</span> <span class="toc-text">后台压力</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#负载均衡"><span class="toc-number">9.2.3.</span> <span class="toc-text">负载均衡</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#负载平衡压缩"><span class="toc-number">9.2.4.</span> <span class="toc-text">负载平衡压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#群集连接摘要"><span class="toc-number">9.2.5.</span> <span class="toc-text">群集连接摘要</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优先级"><span class="toc-number">9.2.6.</span> <span class="toc-text">优先级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#更改配置和上下文菜单选项"><span class="toc-number">9.2.7.</span> <span class="toc-text">更改配置和上下文菜单选项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#弯曲连接"><span class="toc-number">9.2.8.</span> <span class="toc-text">弯曲连接</span></a></li></ol></li></ol></li></ol></div></div><div class="post-content"><p>转载：<a href="https://blog.csdn.net/zhanglong_4444/article/details/88669403" target="_blank" rel="noopener">https://blog.csdn.net/zhanglong_4444/article/details/88669403</a></p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p>DataFlow Manager：DataFlow Manager（DFM）是NiFi用户，具有添加，删除和修改NiFi数据流组件的权限。</p>
+<p>FlowFile：FlowFile代表NiFi中的单个数据。FlowFile由两个组件组成：FlowFile Attributes和FlowFile Content 。</p>
+<p>Content是FlowFile表示的数据。</p>
+<p>Attributes是提供有关数据的信息或上下文的特征; 它们由键值对组成。<br>所有FlowFiles都具有以下标准属性：</p>
+<ul>
+<li>uuid：一个通用唯一标识符，用于区分FlowFile与系统中的其他FlowFiles。</li>
+<li>filename：在将数据存储到磁盘或外部服务时可以使用的可读文件名</li>
+<li>path：在将数据存储到磁盘或外部服务时可以使用的分层结构值，以便数据不存储在单个目录中</li>
+</ul>
+<p>Processor：处理器是NiFi组件，用于监听传入数据; 从外部来源提取数据; 将数据发布到外部来源; 并从FlowFiles中路由，转换或提取信息。</p>
+<p>Relationship：每个处理器都为其定义了零个或多个关系。命名这些关系以指示处理FlowFile的结果。处理器处理完FlowFile后，它会将FlowFile路由（或“传输”）到其中一个关系。然后，DFM能够将这些关系中的每一个连接到其他组件，以指定每个潜在处理结果下FlowFile应该在哪里进行下一步。</p>
+<p>Connection：DFM通过将组件从NiFi工具栏的“组件”部分拖动到画布，然后通过Connections将组件连接在一起来创建自动数据流。每个连接由一个或多个关系组成。对于绘制的每个Connection，DFM可以确定应该为Connection使用哪些关系。这允许基于其处理结果以不同方式路由数据。每个连接都包含一个FlowFile队列。将FlowFile传输到特定关系时，会将其添加到属于关联Connection的队列中。</p>
+<p>Controller Service：控制器服务是扩展点，在用户界面中由DFM添加和配置后，将在NiFi启动时启动，并提供供其他组件（如处理器或其他控制器服务）使用的信息。多个组件使用的常见Controller服务是StandardSSLContextService。它提供了一次配置密钥库和/或信任库属性的能力，并在整个应用程序中重用该配置。我们的想法是，控制器服务不是在每个可能需要它的处理器中配置这些信息，而是根据需要为任何处理器提供。</p>
+<p>Reporting Task：报告任务在后台运行，以提供有关NiFi实例中发生情况的统计报告。DFM根据需要在用户界面中添加和配置报告任务。常见的报告任务包括ControllerStatusReportingTask，MonitorDiskUsage报告任务，MonitorMemory报告任务和StandardGangliaReporter。</p>
+<p>Funnel：Funnel是一个NiFi组件，用于将来自多个Connections的数据合并到一个Connection中。</p>
+<p>Process Group：当数据流变得复杂时，在更高，更抽象的层面上推断数据流通常是有益的。NiFi允许将多个组件（如处理器）组合到一个过程组中。然后，NiFi用户界面使DFM可以轻松地将多个流程组连接到逻辑数据流中，并允许DFM进入流程组以查看和操作流程组中的组件。</p>
+<p>Port：使用一个或多个进程组构建的数据流需要一种方法将进程组连接到其他数据流组件。这是通过使用Ports实现的。DFM可以向进程组添加任意数量的输入端口和输出端口，并相应地命名这些端口。</p>
+<p>Remote Process Group：正如数据传输进出进程组一样，有时需要将数据从一个NiFi实例传输到另一个实例。虽然NiFi提供了许多不同的机制来将数据从一个系统传输到另一个系统，但是如果将数据传输到另一个NiFi实例，远程进程组通常是实现此目的的最简单方法。</p>
+<p>Bulletin：NiFi用户界面提供了大量有关应用程序当前状态的监视和反馈。除了滚动统计信息和为每个组件提供的当前状态之外，组件还能够报告公告。每当组件报告公告时，该组件上都会显示公告图标。系统级公告显示在页面顶部附近的状态栏上。使用鼠标悬停在该图标上将提供一个工具提示，显示公告的时间和严重性（调试，信息，警告，错误）以及公告的消息。也可以在全局菜单中的公告板页面中查看和过滤所有组件的公告。</p>
+<p>Template：通常，数据流由许多可以重用的子流组成。NiFi允许DFM选择数据流的一部分（或整个数据流）并创建模板。此模板具有名称，然后可以像其他组件一样拖动到画布上。结果，可以将若干组件组合在一起以形成更大的构建块，从该构建块创建数据流。这些模板也可以导出为XML并导入到另一个NiFi实例中，从而可以共享这些构建块。</p>
+<p>flow.xml.gz：DFM放入NiFi用户界面画布的所有内容都实时写入一个名为flow.xml.gz的文件。该文件nifi/conf默认位于目录中。在画布上进行的任何更改都会自动保存到此文件中，而无需用户单击“保存”按钮。此外，NiFi在更新时会自动在归档目录中创建此文件的备份副本。您可以使用这些归档文件来回滚流配置。为此，请停止NiFi，将flow.xml.gz替换为所需的备份副本，然后重新启动NiFi。在集群环境中，停止整个NiFi集群，替换其中一个节点的flow.xml.gz，然后重新启动该节点。删除flow.xml.gz来自其他节点。确认节点启动为单节点群集后，启动其他节点。替换的流配置将在群集中同步。flow.xml.gz的名称和位置以及自动存档行为是可配置的。有关更多详细信息，请参阅“ 系统管理员指南”。</p>
+<h2 id="NiFi用户界面"><a href="#NiFi用户界面" class="headerlink" title="NiFi用户界面"></a>NiFi用户界面</h2><p>NiFi UI提供了创建自动数据流以及可视化，编辑，监视和管理这些数据流的机制。UI可以分为几个部分，每个部分负责应用程序的不同功能。本节提供应用程序的屏幕截图，并突出显示UI的不同部分。每个部分将在本文档后面进一步详细讨论。</p>
+<p>启动应用程序后，用户可以通过转到http://<hostname>:8080/nifiWeb浏览器中的默认地址导航到UI 。默认情况下没有配置权限，因此任何人都可以查看和修改数据流。有关保护系统的信息，请参阅“ 系统管理员指南”。</hostname></p>
+<p>当DFM首次导航到UI时，会提供一个空白画布，可在其上构建数据流：<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/1.png" alt="image"></p>
+<p>组件工具栏跨越屏幕的左上角。它包含可以拖动到画布上以构建数据流的组件。在构建DataFlow中更详细地描述了每个组件。</p>
+<p>状态栏位于组件工具栏下。状态栏提供有关当前在流中处于活动状态的线程数，流中当前存在的数据量，每个状态中画布上存在的远程进程组数（传输，未传输），有多少的信息画布上的处理器存在于每个状态（已停止，正在运行，无效，已禁用），每个状态下画布上存在多少个版本化的进程组（最新，本地修改，过时，本地修改和失效，同步失败）和上次刷新所有此类信息的时间戳。此外，如果NiFi实例是群集的，则状态栏会显示群集中有多少节点以及当前连接的节点数。</p>
+<p>操作面板位于屏幕的左侧。它由DFM用于管理流的按钮以及管理用户访问和配置系统属性的管理员组成，例如应向应用程序提供多少系统资源。</p>
+<p>在画布的右侧是搜索和全局菜单。您可以使用“搜索”轻松查找画布上的组件，并可以按组件名称，类型，标识符，配置属性及其值进行搜索。全局菜单包含允许您操作画布上现有组件的选项:<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/2.png" alt="image"></p>
+<p>此外，UI还具有一些功能，可让您轻松浏览画布。您可以使用“导航选项板”在画布上平移，以及放大和缩小。数据流的“Birds Eye View”提供了数据流的高级视图，并允许您平移大部分数据流。您还可以在屏幕底部找到breadcrumbs。当您导航进出流程组时，breadcrumbs会显示流程中的深度，以及您输入的每个流程组以达到此深度。面包屑中列出的每个进程组都是一个链接，可以将您带回流中的该级别。<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/3.png" alt="image"></p>
+<h2 id="使用多租户授权访问UI"><a href="#使用多租户授权访问UI" class="headerlink" title="使用多租户授权访问UI"></a>使用多租户授权访问UI</h2><p>多租户授权允许多组用户（租户）命令，控制和观察数据流的不同部分，具有不同级别的授权。当经过身份验证的用户尝试查看或修改NiFi资源时，系统会检查用户是否具有执行该操作的权限。这些权限由可以应用于系统范围或单个组件的策略定义。从数据流管理器的角度来看，这意味着一旦您可以访问NiFi画布，您就可以看到一系列功能，具体取决于分配给您的权限。</p>
+<p>可用的全球访问策略是：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>特权</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>view the UI</td>
+<td>允许用户查看UI</td>
+</tr>
+<tr>
+<td>access the controller</td>
+<td>允许用户查看和修改控制器，包括报告任务，控制器服务和群集中的节点</td>
+</tr>
+<tr>
+<td>query provenance</td>
+<td>允许用户提交出处搜索并请求甚至沿袭</td>
+</tr>
+<tr>
+<td>access restricted components</td>
+<td>假设其他权限足够，允许用户创建/修改受限制的组件。受限组件可以指示需要哪些特定权限。可以为特定限制授予权限，也可以在不受限制的情况下授予权限。如果授予权限而不受限制，则用户可以创建/修改所有受限制的组件。</td>
+</tr>
+<tr>
+<td>access all policies</td>
+<td>允许用户查看和修改所有组件的策略</td>
+</tr>
+<tr>
+<td>access users/groups</td>
+<td>允许用户查看和修改用户和用户组</td>
+</tr>
+<tr>
+<td>retrieve site-to-site details</td>
+<td>允许其他NiFi实例检索站点到站点的详细信息</td>
+</tr>
+<tr>
+<td>view system diagnostics</td>
+<td>允许用户查看系统诊断</td>
+</tr>
+<tr>
+<td>proxy user requests</td>
+<td>允许代理计算机代表其他人发送请求</td>
+</tr>
+<tr>
+<td>access counters</td>
+<td>允许用户查看和修改计数器</td>
+</tr>
+</tbody></table>
+<p>可用的组件级访问策略包括：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>特权</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>view the component</td>
+<td>允许用户查看组件配置详细信息</td>
+</tr>
+<tr>
+<td>modify the component</td>
+<td>允许用户修改组件配置详细信息</td>
+</tr>
+<tr>
+<td>view provenance</td>
+<td>允许用户提交出处搜索并请求甚至追溯</td>
+</tr>
+<tr>
+<td>view the data</td>
+<td>允许用户在出站连接中的流文件队列中以及通过出处事件查看此组件的元数据和内容</td>
+</tr>
+<tr>
+<td>modify the data</td>
+<td>允许用户在出站连接中清空流文件队列，并通过出处事件提交重播</td>
+</tr>
+<tr>
+<td>view the policies</td>
+<td>允许用户查看可以查看和修改组件的用户列表</td>
+</tr>
+<tr>
+<td>modify the policies</td>
+<td>允许用户修改可以查看和修改组件的用户列表</td>
+</tr>
+<tr>
+<td>retrieve data via site-to-site</td>
+<td>允许端口从NiFi实例接收数据</td>
+</tr>
+<tr>
+<td>send data via site-to-site</td>
+<td>允许端口从NiFi实例发送数据</td>
+</tr>
+</tbody></table>
+<p>如果您无法查看或修改NiFi资源，请与系统管理员联系，或参阅系统管理员指南中的配置用户和访问策略以 获取更多信息</p>
+<h2 id="向画布添加组件"><a href="#向画布添加组件" class="headerlink" title="向画布添加组件"></a>向画布添加组件</h2><p>处理器：处理器是最常用的组件，因为它负责数据的入口，出口，路由和操作。有许多不同类型的处理器。实际上，这是NiFi中非常常见的扩展点，这意味着许多供应商可能会实施自己的处理器来执行其用例所需的任何功能。将处理器拖动到画布上时，会向用户显示一个对话框，以选择要使用的处理器类型。</p>
+<p>在右上角，用户可以根据处理器类型或与处理器关联的标签过滤列表。处理器开发人员能够将标签添加到其处理器中。这些标签在此对话框中用于过滤，并显示在标签云的左侧。使用特定标记存在的处理器越多，标记在标记云中显示的越大。单击云中的标记会将可用的处理器过滤为仅包含该标记的处理器。如果选择了多个标记，则仅显示包含所有这些标记的处理器。例如，如果我们只想显示那些允许我们提取文件的处理器，我们可以同时选择filesTag和ingestTag。</p>
+<p>受限制的组件将在受限<img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/restricted.png" alt="image">其名称旁边标有图标。这些组件可用于执行操作员通过NiFi REST API / UI提供的任意未经过抽样的代码，或者可用于使用NiFi OS凭证获取或更改NiFi主机系统上的数据。这些组件可由其他授权的NiFi用户使用，超出应用程序的预期用途，升级特权，或者可能暴露有关NiFi进程或主机系统内部的数据。所有这些功能都应被视为特权，管理员应了解这些功能，并为可信用户的子集明确启用它们。在允许用户创建和修改受限制的组件之前，必须授予他们访问权限。徘徊在受限<img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/restricted.png" alt="image">图标将显示受限制的组件所需的特定权限。无论限制如何，都可以分配权限。在这种情况下，用户可以访问所有受限制的组件。或者，可以为用户分配对特定限制的访问权限。如果用户已被授予访问组件所需的所有限制的权限，则他们将具有对该组件的访问权限，否则将获得足够的权限。有关更多信息，请参阅 在版本化流程中访问具有多租户授权和受限组件的UI。</p>
+<p>单击Add按钮或双击处理器类型将选定的处理器添加到画布中删除它的位置。 </p>
+<blockquote>
+<p>对于添加到画布的任何组件，可以使用鼠标选择它并将其移动到画布上的任何位置。此外，可以通过按住Shift键并选择每个项目或按住Shift键并在所需组件周围拖动选择框，一次选择多个项目。</p>
+</blockquote>
+<p>虽然上下文菜单中提供的选项有所不同，但是当您具有使用处理器的完全权限时，通常可以使用以下选项：</p>
+<ul>
+<li><p>Configure：此选项允许用户建立或更改处理器的配置（请参阅配置处理器）。</p>
+<blockquote>
+<p>对于处理器，端口，远程进程组，连接和标签，可以通过双击所需组件来打开配置对话框。</p>
+</blockquote>
+</li>
+<li><p>Start或Stop：此选项允许用户启动或停止处理器; 该选项可以是Start或Stop，具体取决于处理器的当前状态。</p>
+</li>
+<li><p>Enable或Disable：此选项允许用户启用或启用处理器; 该选项将为“启用”或“禁用”，具体取决于处理器的当前状态。</p>
+</li>
+<li><p>View data provenance：此选项显示NiFi数据来源表，其中包含有关通过该处理器路由的FlowFiles的数据来源事件的信息（请参阅数据来源）。</p>
+</li>
+<li><p>View status history：此选项打开处理器统计信息随时间的图形表示。</p>
+</li>
+<li><p>View usage：此选项将用户带到处理器的使用文档。</p>
+</li>
+<li><p>View connections→Upstream：此选项允许用户查看和“跳转”到进入处理器的上游连接。当处理器连接进出其他进程组时，这尤其有用。</p>
+</li>
+<li><p>View connections→Downstream：此选项允许用户查看和“跳转”到处理器外的下游连接。当处理器连接进出其他进程组时，这尤其有用。</p>
+</li>
+<li><p>Center in view：此选项将画布的视图置于给定的处理器上。</p>
+</li>
+<li><p>Change color：此选项允许用户更改处理器的颜色，这可以使大流量的可视化管理更容易。</p>
+</li>
+<li><p>Create template：此选项允许用户从所选处理器创建模板。</p>
+</li>
+<li><p>Copy：此选项将所选处理器的副本放在剪贴板上，以便可以通过右键单击画布并选择“粘贴”将其粘贴到画布上的其他位置。复制/粘贴操作也可以使用按键Ctrl-C（Command-C）和Ctrl-V（Command-V）完成。</p>
+</li>
+<li><p>Delete：此选项允许DFM从画布中删除处理器。</p>
+</li>
+</ul>
+<p>Input Port：输入端口提供将数据传输到进程组的机制。将输入端口拖动到画布上时，将提示DFM命名端口。进程组中的所有端口必须具有唯一的名称。</p>
+<p>Process Group：进程组可用于对一组组件进行逻辑分组，以便更容易理解和维护数据流。将进程组拖动到画布上时，将提示DFM命名进程组。同一父组中的所有进程组必须具有唯一的名称。然后，进程组将嵌套在该父组中。</p>
+<p>将进程组拖到画布上后，可以通过右键单击进程组并从上下文菜单中选择一个选项来与其进行交互。从上下文菜单中可用的选项会有所不同，具体取决于分配给您的权限。</p>
+<p>虽然上下文菜单中提供的选项各不相同，但如果您具有使用进程组的完全权限，则通常可以使用以下选项：</p>
+<ul>
+<li>Configure：此选项允许用户建立或更改进程组的配置。</li>
+<li>Variables：此选项允许用户在NiFi UI中创建或配置变量。</li>
+<li>Enter group：此选项允许用户进入进程组。<blockquote>
+<p>也可以双击进程组输入它。</p>
+</blockquote>
+</li>
+<li>Start：此选项允许用户启动进程组。</li>
+<li>Stop：此选项允许用户停止进程组。</li>
+<li>View status history：此选项打开过程组随时间变化的统计信息的图形表示。</li>
+<li>View connections→Upstream：此选项允许用户查看和“跳转”进入进程组的上游连接。</li>
+<li>View connections→Downstream：此选项允许用户查看和“跳转”到流程组外的下游连接。</li>
+<li>Center in view：此选项将画布视图置于给定进程组的中心。</li>
+<li>Group：此选项允许用户创建一个新的流程组，其中包含选定的流程组和在画布上选择的任何其他组件。</li>
+<li>Create template：此选项允许用户从选定的进程组创建模板。</li>
+<li>Copy：此选项将所选进程组的副本放在剪贴板上，以便可以通过右键单击画布并选择“粘贴”将其粘贴到画布上的其他位置。复制/粘贴操作也可以使用按键Ctrl-C（Command-C）和Ctrl-V（Command-V）完成。</li>
+<li>Delete：此选项允许DFM删除进程组。</li>
+</ul>
+<p>Remote Process Group：远程进程组显示并且行为类似于进程组。但是，远程进程组（RPG）引用了NiFi的远程实例。将RPG拖动到画布上时，不会提示输入名称，而是提示DFM输入远程NiFi实例的URL。如果远程NiFi是群集实例，则应使用的URL是该群集中任何NiFi实例的URL。当数据通过RPG传输到NiFi的群集实例时，RPG将首先连接到远程实例，其URL配置为确定群集中的节点以及每个节点的繁忙程度。然后，此信息用于对推送到每个节点的数据进行负载平衡。然后定期询问远程实例，以确定有关从群集中删除或添加到群集的任何节点的信息，并根据每个节点的负载重新计算负载平衡。有关更多信息，请参阅有关的部分站点到站点。</p>
+<p>将远程进程组拖到画布上后，可以通过右键单击远程进程组并从上下文菜单中选择一个选项来与其进行交互。根据分配给您的权限，上下文菜单中可用的选项会有所不同。</p>
+<p>Funnel：Funnel用于将来自多个Connections的数据合并到一个Connection中。这有两个好处。首先，如果使用相同的目标创建了许多连接，则如果这些连接必须跨越大空间，则画布可能会变得混乱。通过将这些Connections汇集到一个Connection中，可以绘制该单个Connection以跨越该大空间。其次，可以使用FlowFile优先级配置器配置Connections。来自多个Connections的数据可以汇集到一个Connection中，从而能够对该一个Connection上的所有数据进行优先级排序，而不是单独确定每个Connection上的数据的优先级。</p>
+<p>Template：模板可以由流的各个部分的DFM创建，也可以从其他数据流导入。这些模板提供了更大的构建块，可以快速创建复杂的流程。将模板拖动到画布上时，DFM会提供一个对话框，用于选择要添加到画布的模板</p>
+<p>Label：标签用于为数据流的各个部分提供文档。将Label放到画布上时，会使用默认大小创建它。然后可以通过拖动右下角的手柄来调整Label的大小。标签在最初创建时没有文本。可以通过右键单击Label并选择来添加Label的文本Configure。</p>
+<h2 id="配置处理器-Configuring-a-Processor"><a href="#配置处理器-Configuring-a-Processor" class="headerlink" title="配置处理器 ( Configuring a Processor )"></a>配置处理器 ( Configuring a Processor )</h2><p>要配置处理器，请右键单击处理器，然后Configure从上下文菜单中选择该选项。或者，只需双击处理器即可。打开配置对话框，其中包含四个不同的选项卡，每个选项卡将在下面讨论。完成处理器配置后，可以通过单击Apply按钮应用更改，或单击按钮取消所有更改Cancel。</p>
+<p>请注意，处理器启动后，为处理器显示的上下文菜单不再有Configure 选项，而是有一个View Configuration选项。处理器运行时无法更改处理器配置。您必须先停止处理器并等待其所有活动任务完成，然后再次配置处理器。</p>
+<h3 id="设置标签"><a href="#设置标签" class="headerlink" title="设置标签"></a>设置标签</h3><p>处理器配置对话框中的第一个选项卡是“设置”选项卡：<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/4.png" alt="image"></p>
+<p>此选项卡包含几个不同的配置项。首先，它允许DFM更改处理器的名称。默认情况下，处理器的名称与处理器类型相同。处理器名称旁边是一个复选框，指示处理器是否已启用。将处理器添加到画布后，将启用它。如果禁用处理器，则无法启动。禁用状态用于指示当启动一组处理器时，例如当DFM启动整个进程组时，应排除此（禁用）处理器。</p>
+<p>在Name配置下方，将显示Processor的唯一标识符以及Processor的类型和NAR包。这些值无法修改。</p>
+<p>接下来是两个用于配置“惩罚持续时间”和“产量持续时间”的对话框。在处理一条数据（FlowFile）的正常过程期间，可能发生事件，该事件指示此时不能处理数据但是数据可以在稍后的时间处理。发生这种情况时，处理器可以选择Penalize FlowFile。这将阻止FlowFile在一段时间内被处理。例如，如果处理器要将数据推送到远程服务，但远程服务已经有一个与处理器指定的文件名同名的文件，则处理器可能会惩罚FlowFile。“惩罚持续时间”允许DFM指定FlowFile应该受到多长时间的惩罚。默认值为30 seconds。</p>
+<p>类似地，处理器可以确定存在某种情况，使得处理器不再能够进行任何进展，而不管其正在处理的数据。例如，如果处理器要将数据推送到远程服务并且该服务没有响应，则处理器无法取得任何进展。结果，处理器应该“产生”，这将阻止处理器被安排运行一段时间。通过设置’Yield Duration’来指定该时间段。默认值为1 second。</p>
+<p>“设置”选项卡左侧的最后一个可配置选项是“公告”级别。每当处理器写入其日志时，处理器也将生成公告。此设置指示应在用户界面中显示的最低级别的公告。默认情况下，公告级别设置为WARN，这意味着它将显示所有警告和错误级别公告。</p>
+<p>“设置”选项卡的右侧包含“自动终止关系”部分。此处列出了处理器定义的每个关系及其描述。为了使处理器被视为有效且能够运行，处理器定义的每个关系必须连接到下游组件或自动终止。如果关系是自动终止的，则将从流中删除任何路由到该关系的FlowFile，并将其处理视为完成。已连接到下游组件的任何关系都无法自动终止。必须首先从使用它的任何Connection中删除关系。此外，对于选择自动终止的任何关系。</p>
+<h3 id="调度选项卡"><a href="#调度选项卡" class="headerlink" title="调度选项卡"></a>调度选项卡</h3><p>“处理器配置”对话框中的第二个选项卡是“计划”选项卡：<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/5.png" alt="image"></p>
+<h4 id="调度策略"><a href="#调度策略" class="headerlink" title="调度策略"></a>调度策略</h4><p>第一个配置选项是调度策略。调度组件有三种可能的选项：</p>
+<ul>
+<li>Timer driven ：这是默认模式。处理器将安排定期运行。运行处理器的时间间隔由“运行时间表”选项定义（见下文）。</li>
+<li>Event driven：选择此模式时，将触发处理器以由事件运行，并且当FlowFiles进入连接此处理器的Connections时，将发生该事件。此模式目前被认为是实验性的，并非所有处理器都支持。选择此模式时，“运行计划”选项不可配置，因为处理器未被触发定期运行，而是作为事件的结果。此外，这是“并发任务”选项可以设置为0的唯一模式。在这种情况下，线程数仅受管理员配置的事件驱动线程池的大小限制。</li>
+<li>CRON驱动：当使用CRON驱动的调度模式时，处理器被安排定期运行，类似于定时器驱动的调度模式。然而，CRON驱动模式以增加配置的复杂性为代价提供了显着更大的灵活性。CRON驱动的调度值是由六个必需字段和一个可选字段组成的字符串，每个字段由空格分隔。这些字段是：<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Valid values</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Seconds</td>
+<td>0-59</td>
+</tr>
+<tr>
+<td>Minutes</td>
+<td>0-59</td>
+</tr>
+<tr>
+<td>Hours</td>
+<td>0-23</td>
+</tr>
+<tr>
+<td>Day of Month</td>
+<td>1-31</td>
+</tr>
+<tr>
+<td>Month</td>
+<td>1-12 or JAN-DEC</td>
+</tr>
+<tr>
+<td>Day of Week</td>
+<td>1-7 or SUN-SAT</td>
+</tr>
+<tr>
+<td>Year (optional)</td>
+<td>empty, 1970-2099</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="并发任务-Concurrent-Tasks"><a href="#并发任务-Concurrent-Tasks" class="headerlink" title="并发任务(Concurrent Tasks)"></a>并发任务(Concurrent Tasks)</h4><p>接下来，Scheduling选项卡提供名为’Concurrent Tasks’的配置选项。这可以控制处理器将使用的线程数。换句话说，它控制此处理器应同时处理多少个FlowFiles。增加此值通常会使处理器在相同的时间内处理更多数据。但是，它通过使用其他处理器无法使用的系统资源来实现此目的。这基本上提供了处理器的相对权重 - 它控制应该将多少系统资源分配给此处理器而不是其他处理器。该字段适用于大多数处理器。但是，某些类型的处理器只能使用单个“并发”任务进行调度。</p>
+<h4 id="运行计划-Run-Schedule"><a href="#运行计划-Run-Schedule" class="headerlink" title="运行计划(Run Schedule)"></a>运行计划(Run Schedule)</h4><p>“运行计划”指示应该安排处理器运行的频率。此字段的有效值取决于所选的调度策略（参见上文）。如果使用事件驱动的调度策略，则此字段不可用。使用定时器驱动的调度策略时，该值是由数字后跟时间单位指定的持续时间。例如，1 second或5 mins。默认值0 sec表示处理器应尽可能频繁地运行，只要它有要处理的数据即可。这适用于0任何持续时间，而不管时间单位（即，0 sec，0 mins，0 days）。有关适用于CRON驱动的调度策略的值的说明，请参阅CRON驱动的调度策略本身的说明。</p>
+<h4 id="执行-Execution"><a href="#执行-Execution" class="headerlink" title="执行(Execution)"></a>执行(Execution)</h4><p>执行设置用于确定处理器将被调度执行的节点。选择“所有节点”将导致在集群中的每个节点上调度此处理器。选择“主节点”将导致此处理器仅在主节点上进行调度。已为“主节点”执行配置的处理器由处理器图标旁边的“P”标识。</p>
+<p>要快速识别“主节点”处理器，“P”图标也会显示在“摘要”页面的“处理器”选项卡中。</p>
+<h4 id="运行持续时间"><a href="#运行持续时间" class="headerlink" title="运行持续时间"></a>运行持续时间</h4><p>“调度”选项卡的右侧包含一个用于选择“运行持续时间”的滑块。这可以控制处理器每次触发时应安排运行的时间。在滑块的左侧，标记为“较低延迟”，而右侧标记为“较高吞吐量”。处理器完成运行后，必须更新存储库才能将FlowFiles传输到下一个Connection。更新存储库的成本很高，因此在更新存储库之前可以立即完成的工作量越多，处理器可以处理的工作量就越多（吞吐量越高）。但是，这意味着在上一个Process更新此存储库之前，下一个Processor无法开始处理这些FlowFiles。结果是，延迟时间会更长（从开始到结束处理FlowFile所需的时间会更长）。因此，滑块提供了一个频谱，DFM可以从中选择支持较低延迟或较高吞吐量。</p>
+<h3 id="属性选项卡"><a href="#属性选项卡" class="headerlink" title="属性选项卡"></a>属性选项卡</h3><p>Properties选项卡提供了一种配置特定于Processor的行为的机制。没有默认属性。每种类型的处理器必须定义哪些属性对其用例有意义。下面，我们看到RouteOnAttribute Processor的Properties选项卡：<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/6.png" alt="image"></p>
+<h2 id="变量窗口"><a href="#变量窗口" class="headerlink" title="变量窗口"></a>变量窗口</h2><p>可以在NiFi UI中创建和配置变量。变量可用于支持表达式语言的任何字段。NiFi自动获取在UI中创建的新变量或修改变量。</p>
+<p>要访问“变量”窗口，请在未选中任何内容的画布上单击鼠标右键：<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/7.png" alt="image"></p>
+<h3 id="可变范围"><a href="#可变范围" class="headerlink" title="可变范围"></a>可变范围</h3><p>变量的作用域由它们定义的进程组确定，并且可供该级别及以下定义的任何处理器使用（即任何后代处理器）。<br>后代组中的变量会覆盖父组中的值。更具体地说，如果变量x在根组中声明并且也在进程组内声明，则进程组内的组件将使用进程组中x定义的值。</p>
+<h2 id="控制器服务"><a href="#控制器服务" class="headerlink" title="控制器服务"></a>控制器服务</h2><p>Controller Services是共享服务，可供报告任务，处理器和其他服务使用，以用于配置或任务执行。</p>
+<blockquote>
+<p>控制器级别定义的控制器服务仅限于报告任务和其中定义的其他服务。必须在将要使用它们的根进程组或子进程组的配置中定义供数据流中的处理器使用的控制器服务。</p>
+</blockquote>
+<blockquote>
+<p>如果您的NiFi实例受到保护，您查看和添加Controller Services的能力取决于分配给您的权限。如果您无权访问一个或多个Controller Services，则无法在UI中查看或访问它。可以在全局或特定于Controller Service的基础上分配访问权限（有关更多信息，请参阅访问具有多租户授权的UI）。</p>
+</blockquote>
+<h3 id="为报告任务添加控制器服务"><a href="#为报告任务添加控制器服务" class="headerlink" title="为报告任务添加控制器服务"></a>为报告任务添加控制器服务</h3><p>要为报告任务添加控制器服务，请从全局菜单中选择控制器设置。<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/8.png" alt="image"></p>
+<p>这将显示“NiFi设置”窗口。该窗口有四个选项卡：常规，报告任务控制器服务，报告任务和注册表客户端。“常规”选项卡提供实例的总体最大线程数的设置。</p>
+<p>常规”选项卡右侧是“报告任务控制器服务”选项卡。在此选项卡中，DFM可以单击右上角的+按钮以创建新的Controller Service。<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/9.png" alt="image"></p>
+<h2 id="报告任务"><a href="#报告任务" class="headerlink" title="报告任务"></a>报告任务</h2><p>报告任务在后台运行，以提供有关NiFi实例中发生情况的统计报告。DFM添加和配置报告任务，类似于Controller Services的过程。要添加报告任务，请从全局菜单中选择控制器设置。</p>
+<h2 id="连接组件"><a href="#连接组件" class="headerlink" title="连接组件"></a>连接组件</h2><p>用户将连接气泡从一个组件拖动到另一个组件，直到第二个组件突出显示。当用户释放鼠标时，会出现“创建连接”对话框。该对话框包含两个选项卡：“详细信息”和“设置”。它们将在下面详细讨论。请注意，可以绘制连接，以便它在同一处理器上循环。如果DFM希望处理器在失败关系时尝试重新处理FlowFiles，这将非常有用。要创建这种类型的循环连接，只需将连接气泡拖离，然后再返回到同一处理器，直到它突出显示。然后释放鼠标，出现相同的“创建连接”对话框。</p>
+<h3 id="细节标签"><a href="#细节标签" class="headerlink" title="细节标签"></a>细节标签</h3><p>“创建连接”对话框的“详细信息”选项卡提供有关源和目标组件的信息，包括组件名称，组件类型和组件所在的进程组</p>
+<p>此外，此选项卡还提供了选择此Connection中应包含哪些关系的功能。必须至少选择一个关系。如果只有一个关系可用，则会自动选择它。</p>
+<blockquote>
+<p>如果使用相同的关系添加多个Connections，则将自动“克隆”路由到该关系的任何FlowFile，并将副本发送到每个Connections。</p>
+</blockquote>
+<h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><p>“设置”选项卡提供配置连接名称，FlowFile到期，背压阈值，负载平衡策略和优先级的功能：<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/10.png" alt="image"></p>
+<p>连接名称是可选的。如果未指定，则为Connection显示的名称将是Connection的活动关系的名称。</p>
+<h4 id="FlowFile到期"><a href="#FlowFile到期" class="headerlink" title="FlowFile到期"></a>FlowFile到期</h4><p>FlowFile到期是一个概念，通过该概念可以自动从流中删除无法及时处理的数据。例如，当预计数据量超过可以发送到远程站点的卷时，这很有用。在这种情况下，到期可以与优先级排序器一起使用，以确保首先处理最高优先级数据，然后可以丢弃在特定时间段（例如，一小时）内无法处理的任何内容。到期时间基于数据进入NiFi实例的时间。换句话说，如果给定连接上的文件到期时间设置为“1小时”，并且已经在NiFi实例中一小时的文件到达该连接，则该文件将过期。默认值为0 sec表示数据永不过期。当设置了“0秒”以外的文件到期时，连接标签上会出现一个小时钟图标，因此在查看画布上的流时，DFM可以一目了然地看到它。<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/11.png" alt="image"></p>
+<h4 id="后台压力"><a href="#后台压力" class="headerlink" title="后台压力"></a>后台压力</h4><p>NiFi为后台压力提供两种配置元素。这些阈值表示在不再计划运行作为Connection源的组件之前，应允许在队列中存在多少数据。这允许系统避免数据溢出。提供的第一个选项是“后台压力对象阈值”。这是在应用后台压力之前可以在队列中的FlowFiles的数量。第二个配置选项是“背压数据大小阈值”。这指定了在应用反压之前应排队的最大数据量（大小）。通过输入数字后跟数据大小（B对于字节，KB对于千字节，MB对于兆字节，GB对于千兆字节或TB对于太字节）来配置此值。</p>
+<blockquote>
+<p>默认情况下，添加的每个新连接都将具有默认的后台压力对象阈值10,000 objects和后台压力数据大小阈值1 GB。可以通过修改nifi.properties文件中的相应属性来更改这些默认值。</p>
+</blockquote>
+<p>启用背压时，连接标签上会出现小进度条，因此在查看画布上的流时，DFM可以一目了然地看到它。进度条根据队列百分比更改颜色：绿色（0-60％），黄色（61-85％）和红色（86-100％）。<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/12.png" alt="image"></p>
+<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h4><p>负载平衡策略</p>
+<p>为了在群集中的节点之间分配流中的数据，NiFi提供以下负载平衡策略：</p>
+<ul>
+<li>Do not load balance：不要在群集中的节点之间平衡FlowFile。这是默认值。</li>
+<li>Partition by attribute：根据用户指定的FlowFile属性的值确定将给定FlowFile发送到哪个节点。具有相同Attribute值的所有FlowFile将发送到集群中的同一节点。如果目标节点与群集断开连接或无法通信，则数据不会故障转移到另一个节点。数据将排队，等待节点再次可用。此外，如果节点加入或离开集群需要重新平衡数据，则应用一致性散列以避免必须重新分发所有数据。</li>
+<li>Round robin：FlowFiles将以循环方式分发到集群中的节点。如果节点与群集断开连接或无法与节点通信，则排队等待该节点的数据将自动重新分发到另一个节点。</li>
+<li>Single node：所有FlowFiles将发送到集群中的单个节点。它们被发送到哪个节点是不可配置的。如果节点与群集断开连接或无法与节点通信，则排队等待该节点的数据将保持排队，直到该节点再次可用。<blockquote>
+<p>除UI设置外，还有与负载平衡相关的群集节点属性，还必须在nifi.properties中进行配置。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>NiFi会在重新启动时持久保存群集中的节点。这可以防止在所有节点都已连接之前重新分配数据。如果群集已关闭且无意重新启动节点，则用户有责任通过UI中的“群集”对话框从群集中删除该节点（有关详细信息，请参阅管理节点）。</p>
+</blockquote>
+<h4 id="负载平衡压缩"><a href="#负载平衡压缩" class="headerlink" title="负载平衡压缩"></a>负载平衡压缩</h4><p>选择负载平衡策略后，用户可以配置在群集中的节点之间传输时是否应压缩数据。</p>
+<p>可以使用以下压缩选项：</p>
+<ul>
+<li>Do not compress：FlowFiles不会被压缩。这是默认值。</li>
+<li>Compress attributes only：将压缩FlowFile属性，但不会压缩FlowFile内容。</li>
+<li>Compress attributes and content：将压缩FlowFile属性和内容。</li>
+</ul>
+<h4 id="群集连接摘要"><a href="#群集连接摘要" class="headerlink" title="群集连接摘要"></a>群集连接摘要</h4><p>要查看在群集节点之间分配数据的位置，请从“全局菜单”中选择“摘要”。然后选择“连接”选项卡和源的“查看连接详细信息”图标：<br><img src="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/13.png" alt="image"></p>
+<p>这将打开“群集连接摘要”对话框，该对话框显示群集中每个节点上的数据。</p>
+<h4 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h4><p>选项卡的右侧提供了对队列中数据进行优先级排序的功能，以便首先处理更高优先级的数据。优先级可以从顶部（’可用的优先级排序器’）拖动到底部（’选择的优先级排序器’）。可以选择多个优先级排序器。位于“所选优先级”列表顶部的优先级排序是最高优先级。如果两个FlowFiles根据此优先级排序器具有相同的值，则第二个优先级排序器将确定首先处理哪个FlowFile，依此类推。如果不再需要优先级排序器，则可以将其从“选定的优先级排序器”列表拖动到“可用的优先级排序器”列表。</p>
+<p>可以使用以下优先顺序：</p>
+<ul>
+<li>FirstInFirstOutPrioritizer：给定两个FlowFiles，首先处理首先到达连接的FlowFiles。</li>
+<li>NewestFlowFileFirstPrioritizer：给定两个FlowFiles，将首先处理数据流中最新的FlowFiles。</li>
+<li>OldestFlowFileFirstPrioritizer：给定两个FlowFiles，将首先处理数据流中最旧的FlowFiles。’这是在没有选择优先级的情况下使用的默认方案’。</li>
+<li>PriorityAttributePrioritizer：给定两个FlowFiles，将提取名为“priority”的属性。将首先处理具有最低优先级值的那个。<ul>
+<li>请注意，应使用UpdateAttribute处理器在FlowFiles到达具有此优先级设置的连接之前将“priority”属性添加到FlowFiles。</li>
+<li>如果只有一个具有该属性，它将首先出现。</li>
+<li>“priority”属性的值可以是字母数字，其中“a”将出现在“z”之前，“1”出现在“9”之前</li>
+<li>如果“priority”属性无法解析为long，则将使用unicode字符串排序。例如：“99”和“100”将被排序，因此带有“99”的流文件首先出现，但“A-99”和“A-100”将排序，因此带有“A-100”的流文件首先出现。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>与负载平衡策略配置，连接有除了本地队列每个节点的队列。优先级排序器将独立地对每个队列中的数据进行排序。</p>
+</blockquote>
+<h4 id="更改配置和上下文菜单选项"><a href="#更改配置和上下文菜单选项" class="headerlink" title="更改配置和上下文菜单选项"></a>更改配置和上下文菜单选项</h4><p>在两个组件之间建立连接之后，可以更改连接的配置，并且可以将连接移动到新目的地; 但是，必须先停止连接任一侧的处理器，然后才能进行配置或目标更改。</p>
+<h4 id="弯曲连接"><a href="#弯曲连接" class="headerlink" title="弯曲连接"></a>弯曲连接</h4><p>要向现有连接添加弯曲点（或弯头），只需双击要弯曲点所在位置的连接即可。然后，您可以使用鼠标抓住弯曲点并拖动它，以便以所需的方式弯曲连接。您可以根据需要添加任意数量的弯曲点。您还可以使用鼠标将连接上的标签拖动并移动到任何现有折弯点。要删除折弯点，只需再次双击即可。</p>
+</div><div class="tags"><a href="/tags/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/">日志收集</a></div><div class="post-nav"><a class="next" href="/2020/02/20/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/nifi%E7%BB%84%E4%BB%B6%E4%BB%8B%E7%BB%8D/">nifi组件介绍</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://cunmin1718.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Beat/">Beat</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ES/">ES</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kibana/">Kibana</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LVS/">LVS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Logstash/">Logstash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Markdown/">Markdown</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NIFI/">NIFI</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nexus/">Nexus</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ansible/">ansible</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/drill/">drill</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/flume/">flume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ganglia/">ganglia</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/gitLab/">gitLab</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/greenplum/">greenplum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/greenplum/PostgreSQL/">PostgreSQL</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hbase/">hbase</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hive/">hive</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/impala/">impala</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kafka/">kafka</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/seaweed/">seaweed</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/zookeeper/">zookeeper</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 15px;">杂谈</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 15px;">数据仓库</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 15px;">容器</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15px;">数据库</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" style="font-size: 15px;">项目开发</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 15px;">爬虫</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 15px;">运维</a> <a href="/tags/ELK/" style="font-size: 15px;">ELK</a> <a href="/tags/hadoop%E4%BD%93%E7%B3%BB/" style="font-size: 15px;">hadoop体系</a> <a href="/tags/%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/" style="font-size: 15px;">分析引擎</a> <a href="/tags/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/" style="font-size: 15px;">文件存储</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 15px;">消息队列</a> <a href="/tags/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/" style="font-size: 15px;">日志收集</a> <a href="/tags/%E8%BF%90%E7%BB%B4%E7%9B%91%E6%8E%A7/" style="font-size: 15px;">运维监控</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/02/26/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/NiFi%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/">NiFi用户指南</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/20/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/nifi/nifi%E7%BB%84%E4%BB%B6%E4%BB%8B%E7%BB%8D/">nifi组件介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/15/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/greenplum/%E5%88%86%E5%8C%BA%E8%A1%A8/">分区表</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/07/%E6%95%B0%E6%8D%AE%E5%BA%93/postgreSQL/PrepareStatement%E7%9A%84%E5%8A%9F%E4%B8%8E%E8%BF%87/">PrepareStatement的功与过</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/05/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/greenplum/%E8%B5%84%E6%BA%90%E9%98%9F%E5%88%97%E7%AE%A1%E7%90%86/">资源队列管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/30/python/python/Python%E5%B8%B8%E7%94%A8%E5%86%85%E5%BB%BA%E6%96%B9%E6%B3%95/">Python常用内建方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/29/python/python/args%E5%92%8Ckwargs%E7%9A%84%E5%8C%BA%E5%88%AB/">args和kwargs的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/13/%E6%95%B0%E6%8D%AE%E5%BA%93/redis/redis%E9%85%8D%E7%BD%AE/">redis配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/13/%E6%95%B0%E6%8D%AE%E5%BA%93/redis/redis%E5%AE%89%E8%A3%85/">redis安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/12/python/scrapy/Middleware/HTTP%E7%BC%93%E5%AD%98%E4%B8%8E%E7%A6%BB%E7%BA%BF%E5%B7%A5%E4%BD%9C/">4. HTTP缓存与离线工作</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">记忆不靠谱.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
